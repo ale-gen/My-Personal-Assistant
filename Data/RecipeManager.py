@@ -1,5 +1,4 @@
 import requests
-from datetime import datetime
 import sys
 
 
@@ -9,7 +8,7 @@ class RecipeManager:
         self.personal_assistant = personal_assistant
         self.recipe_data = recipe_data
 
-    def fetch_recipes_json(self, api_key, meal, random):
+    def fetch_recipes_json(self, api_key, random, meal=None):
         if random:
             url = f"https://api.spoonacular.com/recipes/random?apiKey={api_key}"
         else:
@@ -29,18 +28,18 @@ class RecipeManager:
             print(error)
             sys.exit(1)
 
-    def check_recipe(self, api_key, meal, random):
-        data = self.fetch_recipes_json(api_key, meal, random)
+    def check_recipe(self, api_key, random, meal=None):
+        data = self.fetch_recipes_json(api_key, random, meal)
         if data != -1:
             if random:
                 self.personal_assistant.respond(f"You draw {data['name']}")
 
-            price_per_serving = (float(data['price per servings']) / 100).__round__(2)
-            self.personal_assistant.respond(f"Your dish is vege: {data['vegetarian']}, time needed to prepare is equal "
-                                            f"{data['time to prepare']} minutes. In file I prepare a shopping list for "
-                                            f"you for {data['servings']} servings. The price is equal "
-                                            f"{price_per_serving} dollars per serving.")
+        price_per_serving = (float(data['price per servings']) / 100).__round__(2)
+        self.personal_assistant.respond(f"Your dish is vege: {data['vegetarian']}, time needed to prepare is equal "
+                                        f"{data['time to prepare']} minutes. In file I prepare a shopping list for "
+                                        f"you for {data['servings']} servings. The price is equal "
+                                        f"{price_per_serving} dollars per serving.")
 
-            with open('shopping_list.txt', 'w') as file:
-                file.write(f"Shopping list for {data['name']}:\n")
-                file.writelines("%s: %s %s\n" % (line[0], line[1], line[2]) for line in data['ingredients'])
+        with open('shopping_list.txt', 'w') as file:
+            file.write(f"Shopping list for {data['name']}:\n")
+            file.writelines("%s: %s %s\n" % (line[0], line[1], line[2]) for line in data['ingredients'])

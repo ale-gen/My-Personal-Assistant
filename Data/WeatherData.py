@@ -15,7 +15,7 @@ class WeatherData:
         wind_speed = self.json_data['wind']['speed']
         sunrise = self.json_data['sys']['sunrise']
         sunset = self.json_data['sys']['sunset']
-        weather_data = {"city": name, "description": description, "temperature": temp, "perceived temperature": feels_like_temp, \
-                        "minimum temperature": temp_min, "maximum temperature": temp_max, "pressure": pressure, "humidity": humidity, \
+        weather_data = {"city": name, "description": description, "temperature": temp, "perceived temperature": feels_like_temp,
+                        "minimum temperature": temp_min, "maximum temperature": temp_max, "pressure": pressure, "humidity": humidity,
                         "wind speed": wind_speed, "sunrise": sunrise, "sunset": sunset, "code": code}
         return weather_data

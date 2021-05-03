@@ -1,7 +1,7 @@
 import speech_recognition as sr
-from gtts import gTTS # Google text to speech
-from playsound import playsound # To play sound
-import os # Save/open files
+from gtts import gTTS  # Google text to speech
+from playsound import playsound  # To play sound
+import os  # Save/open files
 
 
 class Speech:
@@ -25,7 +25,7 @@ class Speech:
         num = 0
         print(output)
         num += 1
-        response = gTTS(text= output, lang='en')
+        response = gTTS(text=output, lang='en')
         file = str(num)+".mp3"
         response.save(file)
         playsound(file, True)

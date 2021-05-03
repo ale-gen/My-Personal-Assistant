@@ -61,8 +61,8 @@ class WeatherManager:
                         self.personal_assistant.respond("I can't get that data, I'm sorry")
                         self.personal_assistant.respond("Do you want to try again?")
         else:
-            self.personal_assistant.respond("Sorry, I can't found out about weather it this city. Are you sure you gave me a correct data? Do you \
-                    want to try again? ")
+            self.personal_assistant.respond("Sorry, I can't found out about weather it this city. Are you sure you "
+                                            "gave me a correct data? Do you want to try again? ")
             user_answer = self.personal_assistant.talk()
             if user_answer == "yes":
                 self.check_weather(api_key)
