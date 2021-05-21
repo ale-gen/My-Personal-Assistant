@@ -4,9 +4,10 @@ import random
 import webbrowser
 import TextFiles.FileData as fileData
 import Data.Speech as sp
-import Managers.WeatherManager as wm
 import Data.Alarm as am
+import Managers.WeatherManager as wm
 import Managers.RecipeManager as rm
+import Managers.LanguageManager as lm
 
 
 if __name__ == '__main__':
@@ -52,7 +53,7 @@ if __name__ == '__main__':
             alarm = am.Alarm(personal_assistant)
             alarm.set_alarm()
 
-        elif 'check weather' in order:
+        elif 'weather' in order:
             api_key = api_keys.get("OpenWeather").split("\n")[0]
             wm.check_weather(personal_assistant, api_key)
 
@@ -69,3 +70,16 @@ if __name__ == '__main__':
                 rm.check_recipe(personal_assistant, api_key, True)
             else:
                 rm.check_recipe(personal_assistant, api_key, False, answer)
+
+        elif 'translate' in order:
+            answer = True
+            while answer:
+                lm.service_sentence(personal_assistant)
+                personal_assistant.respond("Do you want to translate something else? ")
+                answer = personal_assistant.talk()
+                if answer != "yes":
+                    answer = False
+
+        elif 'detect' in order:
+            # Detect language with gui (TextField to copy the sentence to detect language
+            pass

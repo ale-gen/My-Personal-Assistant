@@ -20,6 +20,7 @@ class Speech:
                 print("Sorry I did not hear your question, Please try again.")
         return data
 
+    # Method to speak in english - default
     @classmethod
     def respond(cls, output):
         num = 0
@@ -27,6 +28,18 @@ class Speech:
         num += 1
         response = gTTS(text=output, lang='en')
         file = str(num)+".mp3"
+        response.save(file)
+        playsound(file, True)
+        os.remove(file)
+
+    # Method to speak in every language
+    @classmethod
+    def respond_every_lang(cls, output, lang):
+        num = 0
+        print(output)
+        num += 1
+        response = gTTS(text=output, lang=lang)
+        file = str(num) + ".mp3"
         response.save(file)
         playsound(file, True)
         os.remove(file)

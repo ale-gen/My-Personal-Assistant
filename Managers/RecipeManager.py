@@ -46,12 +46,33 @@ def check_recipe(assistant, api_key, random, meal=None):
 
 
 def choose_dish(api_key, assistant, data):
-    assistant.respond(f"I found {len(data['results'])} recipes")
+    images = []
+    titles = []
+    results_number = len(data['results'])
+    for i in range(0,results_number):
+        images.append(data['results'][i]['image'])
+        titles.append(data['results'][i]['title'])
+    assistant.respond(f"I found {results_number} recipes. Please choose one of them. ")
     # Wyświetlanie gui i wybór użytkownika
     choice = int(assistant.talk())
     print(data)
     id = data['results'][choice]['id']
     return fetch_recipes_json(api_key, False, None, id)
+
+
+def download_images(images, titles):
+    for i in range(0, len(images)):
+        with open(f'{titles[i]}.jpg', 'wb') as handle:
+            response = requests.get(f"{images[i]}", stream=True)
+
+            if not response.ok:
+                print(response)
+
+            for block in response.iter_content(1024):
+                if not block:
+                    break
+
+                handle.write(block)
 
 
 def decode_data(json_data):
