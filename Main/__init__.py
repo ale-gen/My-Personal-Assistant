@@ -2,12 +2,10 @@ import time
 from datetime import datetime
 import random
 import webbrowser
-import Data.WeatherData as wh
 import TextFiles.FileData as fileData
 import Data.Speech as sp
 import Managers.WeatherManager as wm
 import Data.Alarm as am
-import Data.RecipeData as rd
 import Managers.RecipeManager as rm
 
 
@@ -56,9 +54,7 @@ if __name__ == '__main__':
 
         elif 'check weather' in order:
             api_key = api_keys.get("OpenWeather").split("\n")[0]
-            weather_data = wh.WeatherData
-            weather_manager = wm.WeatherManager(personal_assistant, weather_data)
-            weather_manager.check_weather(api_key)
+            wm.check_weather(personal_assistant, api_key)
 
         elif 'open youtube' in order:
             webbrowser.open_new_tab("https://www.youtube.com/watch?v=xlt4JpaPzko")
@@ -67,11 +63,9 @@ if __name__ == '__main__':
 
         elif 'meal' in order:
             api_key = api_keys.get("Spoonacular").split("\n")[0]
-            recipe_data = rd.RecipeData
-            #recipe_manager = rm.RecipeManager(personal_assistant, recipe_data)
             personal_assistant.respond("Give me the meal or tell random if you would like to draw for you.")
             answer = personal_assistant.talk()
-            if answer in "random":
+            if 'random' in answer:
                 rm.check_recipe(personal_assistant, api_key, True)
             else:
                 rm.check_recipe(personal_assistant, api_key, False, answer)
