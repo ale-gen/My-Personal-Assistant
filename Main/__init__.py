@@ -5,10 +5,10 @@ import webbrowser
 import Data.WeatherData as wh
 import TextFiles.FileData as fileData
 import Data.Speech as sp
-import Data.WeatherManager as wm
+import Managers.WeatherManager as wm
 import Data.Alarm as am
 import Data.RecipeData as rd
-import Data.RecipeManager as rm
+import Managers.RecipeManager as rm
 
 
 if __name__ == '__main__':
@@ -68,10 +68,10 @@ if __name__ == '__main__':
         elif 'meal' in order:
             api_key = api_keys.get("Spoonacular").split("\n")[0]
             recipe_data = rd.RecipeData
-            recipe_manager = rm.RecipeManager(personal_assistant, recipe_data)
+            #recipe_manager = rm.RecipeManager(personal_assistant, recipe_data)
             personal_assistant.respond("Give me the meal or tell random if you would like to draw for you.")
             answer = personal_assistant.talk()
-            if answer == "random":
-                recipe_manager.check_recipe(api_key, True)
+            if answer in "random":
+                rm.check_recipe(personal_assistant, api_key, True)
             else:
-                recipe_manager.check_recipe(api_key, False, answer)
+                rm.check_recipe(personal_assistant, api_key, False, answer)
