@@ -8,6 +8,7 @@ import Data.Alarm as am
 import Managers.WeatherManager as wm
 import Managers.RecipeManager as rm
 import Managers.LanguageManager as lm
+import Managers.YoutubeManager as ym
 
 
 if __name__ == '__main__':
@@ -45,7 +46,8 @@ if __name__ == '__main__':
 
         elif 'location' in order:
             api_key = api_keys.get("GoogleMaps")
-            webbrowser.open_new_tab(f"https://www.google.com/maps/@?api={api_key}&map_action=map&zoom=19")
+            #webbrowser.open_new_tab(f"https://www.google.com/maps/@?api={api_key}&map_action=map&zoom=19")
+            webbrowser.open_new_tab(f"https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyAwvEBimzel1cb2LLTh30ykhj0IPo8yiGo")
             personal_assistant.respond("Maps are opening")
             time.sleep(5)
 
@@ -83,3 +85,6 @@ if __name__ == '__main__':
         elif 'detect' in order:
             # Detect language with gui (TextField to copy the sentence to detect language
             pass
+
+        elif 'youtube' in order:
+            ym.manage_youtube(personal_assistant)
