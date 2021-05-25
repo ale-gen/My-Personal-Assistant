@@ -1,6 +1,8 @@
 import requests
 import sys
 from Data.Meal import Meal
+from Views.Recipe_Images import Recipe_Images_View
+import os
 
 
 def fetch_recipes_json(api_key, random, meal_user=None, id_meal_searched=None):
@@ -53,8 +55,13 @@ def choose_dish(api_key, assistant, data):
         images.append(data['results'][i]['image'])
         titles.append(data['results'][i]['title'])
     assistant.respond(f"I found {results_number} recipes. Please choose one of them. ")
-    # Wyświetlanie gui i wybór użytkownika
-    choice = int(assistant.talk())
+    download_images(images, titles)
+    recipe_view = Recipe_Images_View(images, titles)
+    choice = ""
+    while choice is "" or choice is None:
+        choice = recipe_view.get_chosen_image()
+    choice = int(choice)
+    delete_images(images, titles)
     print(data)
     id = data['results'][choice]['id']
     return fetch_recipes_json(api_key, False, None, id)
@@ -73,6 +80,14 @@ def download_images(images, titles):
                     break
 
                 handle.write(block)
+
+
+def delete_images(images, titles):
+    for i in range(0, len(images)):
+        try:
+            os.remove(f"{titles[i]}.jpg")
+        except:
+            print("File can't be removed")
 
 
 def decode_data(json_data):
