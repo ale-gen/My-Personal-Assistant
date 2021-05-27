@@ -2,6 +2,7 @@ import time
 from datetime import datetime
 import random
 import webbrowser
+import wikipedia
 import TextFiles.FileData as fileData
 import Data.Speech as sp
 import Data.Alarm as am
@@ -41,6 +42,12 @@ if __name__ == '__main__':
             personal_assistant.respond(f"I am searching {order}")
             webbrowser.open_new_tab(url)
             time.sleep(5)
+
+        elif 'in wikipedia' in order:
+            order = order.replace("in wikipedia", "")
+            explanation = wikipedia.summary(order, sentences=3)
+            personal_assistant.respond("This is what I found: ")
+            personal_assistant.respond(explanation)
 
         elif 'open google' in order:
             webbrowser.open_new_tab("https://www.google.com/")

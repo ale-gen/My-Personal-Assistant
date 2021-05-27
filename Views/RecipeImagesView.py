@@ -25,7 +25,6 @@ class Recipe_Images_View(object):
 
     def push_button(self, chosen_image):
         self.chosen_image = chosen_image
-        self.window.destroy()
 
     def configure_layout(self):
         columns_number = 4

@@ -1,5 +1,4 @@
 import webbrowser
-import os
 
 
 def manage_maps(assistant):

@@ -1,7 +1,7 @@
 import requests
 import sys
 from Data.Meal import Meal
-from Views.Recipe_Images import Recipe_Images_View
+from Views.RecipeImagesView import Recipe_Images_View
 import os
 
 

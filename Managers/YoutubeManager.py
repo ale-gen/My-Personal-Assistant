@@ -1,10 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.support import ui
+import selenium.webdriver.common.keys as keys
 import time
 from random import randint
 
 
-end_patterns = ["finish", "end", "close", "exit"]
+end_patterns = ["finish", "end", "close", "exit", "no", "thanks"]
 
 
 def search(user_query, driver, wait):
@@ -27,12 +28,6 @@ def choose_video(title, driver):
     time.sleep(randint(2, 4))
 
 
-def start_session():
-    driver = webdriver.Safari()
-    wait = ui.WebDriverWait(driver, 100)
-    driver.get("https://www.youtube.com")
-
-
 def accept_conditions(driver):
     accept_box = driver.find_element_by_xpath('//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div[1]/div/button')
     accept_box.click()
@@ -40,15 +35,11 @@ def accept_conditions(driver):
 
 
 def stop_video(driver):
-    #driver.find_element_by_xpath('//*[@id="movie_player"]/div[25]/div[2]/div[1]/button').click()
-    #driver.find_element_by_xpath('//*[@id="movie_player"]/div[34]/div[2]/div[1]/button').click()
-    #driver.find_element_by_class_name('ytp-play-button ytp-button').click()
-    driver.find_element_by_id("movie-player").click()
+    driver.find_element_by_class_name("ytp-play-button-container").click()
 
 
 def resume_video(driver):
-    #driver.find_element_by_xpath('//*[@id="movie_player"]/div[25]/div[2]/div[1]/button').click()
-    driver.find_element_by_class_name('ytp-play-button ytp-button').click()
+    driver.find_element_by_class_name("ytp-play-button-container").click()
 
 
 def maximize_window(driver):
@@ -60,19 +51,16 @@ def minimize_window(driver):
 
 
 def fullscreen(driver):
-    #driver.find_element_by_xpath('//*[@id="movie_player"]/div[25]/div[2]/div[2]/button[10]').click()
-    driver.find_element_by_class_name('ytp-fullscreen-button ytp-button').click()
+    driver.find_element_by_class_name('ytp-fullscreen-button-container').click()
 
 
 def skip_ads(driver):
-    driver.find_element_by_xpath('//*[@id="skip-button:1o"]/span/button').click()
-    #driver.find_element_by_class_name('ytp-ad-skip-button ytp-button').click()
+    button = driver.find_element_by_class_name('ytp-ad-skip-button-container').click()
+    #button.click()
 
 
 def subtitles(driver):
-    #driver.find_element_by_xpath('//*[@id="movie_player"]/div[30]/div[2]/div[2]/button[2]').click()
-    #driver.find_element_by_class_name('ytp-subtitiles-button ytp-button').click()
-    driver.find_element_by_id('')
+    driver.find_element_by_class_name('ytp-subtitiles-button-container').click()
 
 
 def volume(driver):
@@ -96,9 +84,23 @@ def scroll_up(driver):
 
 
 def trail(driver):
-    #driver.find_element_by_xpath('//*[@id="dismiss-button"]').click()
-    #driver.find_element_by_class_name('style-scope ytd-button-renderer style-text size-default')
     driver.find_element_by_id("dismiss-button").click()
+
+
+def login(assistant, driver, wait):
+    assistant.respond("Do you want to log in?")
+    answer = assistant.talk()
+    if answer == "yes":
+        driver.find_element_by_xpath('//*[@id="yDmH0d"]/c-wiz/div/div/div/div[1]/div[1]/div/div/a').click()
+        wait.until(lambda driver: driver.find_element_by_xpath('//*[@id="identifierId"]'))
+        username = driver.find_element_by_xpath('//*[@id="identifierId"]')
+        username.send_keys("o.generowicz@gmail.com")
+        driver.find_element_by_xpath('//*[@id="identifierNext"]/div/button').click()
+        wait.until(lambda driver: driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input'))
+        password = driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
+        password.send_keys("alegen25")
+        submit = driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button')
+        submit.click()
 
 
 def options_during_watching(assistant, driver):
@@ -152,6 +154,7 @@ def manage_youtube(assistant):
     wait = ui.WebDriverWait(driver, 100)
     driver.get("https://www.youtube.com")
     maximize_window(driver)
+    login(assistant, driver, wait)
     assistant.respond("Do you want to accept condition?")
     while answer == "":
         answer = assistant.talk()
