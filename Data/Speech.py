@@ -10,7 +10,6 @@ class Speech:
     def talk(cls):
         input = sr.Recognizer()
         with sr.Microphone() as source:
-            input.adjust_for_ambient_noise(source, duration=2)
             audio = input.listen(source)
             data = ""
             try:

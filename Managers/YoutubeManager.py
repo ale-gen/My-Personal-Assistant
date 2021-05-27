@@ -1,11 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.support import ui
-import selenium.webdriver.common.keys as keys
 import time
 from random import randint
 
 
 end_patterns = ["finish", "end", "close", "exit", "no", "thanks"]
+my_channel = "Ola Generowicz"
 
 
 def search(user_query, driver, wait):
@@ -35,11 +35,11 @@ def accept_conditions(driver):
 
 
 def stop_video(driver):
-    driver.find_element_by_class_name("ytp-play-button-container").click()
+    driver.find_element_by_class_name("ytp-play-button").click()
 
 
 def resume_video(driver):
-    driver.find_element_by_class_name("ytp-play-button-container").click()
+    driver.find_element_by_class_name("ytp-play-button").click()
 
 
 def maximize_window(driver):
@@ -51,16 +51,15 @@ def minimize_window(driver):
 
 
 def fullscreen(driver):
-    driver.find_element_by_class_name('ytp-fullscreen-button-container').click()
+    driver.find_element_by_class_name('ytp-fullscreen-button').click()
 
 
 def skip_ads(driver):
-    button = driver.find_element_by_class_name('ytp-ad-skip-button-container').click()
-    #button.click()
+    driver.find_element_by_class_name('ytp-ad-skip-button-container').click()
 
 
 def subtitles(driver):
-    driver.find_element_by_class_name('ytp-subtitiles-button-container').click()
+    driver.find_element_by_class_name('ytp-subtitiles-button').click()
 
 
 def volume(driver):
@@ -87,6 +86,11 @@ def trail(driver):
     driver.find_element_by_id("dismiss-button").click()
 
 
+def settings(driver):
+    list = driver.find_element_by_class_name('ytp-settings-button')
+    list[0].click()
+
+
 def login(assistant, driver, wait):
     assistant.respond("Do you want to log in?")
     answer = assistant.talk()
@@ -98,7 +102,6 @@ def login(assistant, driver, wait):
         driver.find_element_by_xpath('//*[@id="identifierNext"]/div/button').click()
         wait.until(lambda driver: driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input'))
         password = driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
-        password.send_keys("alegen25")
         submit = driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button')
         submit.click()
 
@@ -144,6 +147,11 @@ def options_during_watching(assistant, driver):
                     skip_ads(driver)
                 except:
                     assistant.respond("Sorry, Skip ads is unavailable")
+            elif 'settings' in answer:
+                try:
+                    settings(driver)
+                except:
+                    assistant.respond("Sorry, I can't change settings")
             answer = ""
 
 
@@ -176,6 +184,8 @@ def manage_youtube(assistant):
                     elif 'higher' in answer:
                         scroll_up(driver)
                         answer = ""
+                if 'my channel' in answer:
+                    answer = my_channel
                 try:
                     search(answer, driver, wait)
                     done = True
