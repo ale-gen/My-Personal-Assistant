@@ -41,22 +41,24 @@ if __name__ == '__main__':
             url = "https://www.google.com.tr/search?q={}".format(order)
             personal_assistant.respond(f"I am searching {order}")
             webbrowser.open_new_tab(url)
-            time.sleep(5)
+            mm.close_browser()
 
         elif 'in wikipedia' in order:
             order = order.replace("in wikipedia", "")
-            explanation = wikipedia.summary(order, sentences=3)
+            explanation = wikipedia.summary(order, sentences=2)
             personal_assistant.respond("This is what I found: ")
             personal_assistant.respond(explanation)
 
-        elif 'open google' in order:
+        elif 'google' in order:
             webbrowser.open_new_tab("https://www.google.com/")
             personal_assistant.respond("Google is opening")
+            mm.close_browser(personal_assistant)
 
         elif 'location' in order:
             api_key = api_keys.get("GoogleMaps")
             webbrowser.open_new_tab(f"https://www.google.com/maps/@?api={api_key}&map_action=map&zoom=19")
             personal_assistant.respond("Maps are opening")
+            mm.close_browser(personal_assistant)
 
         elif 'alarm' in order:
             alarm = am.Alarm(personal_assistant)
@@ -65,10 +67,6 @@ if __name__ == '__main__':
         elif 'weather' in order:
             api_key = api_keys.get("OpenWeather").split("\n")[0]
             wm.check_weather(personal_assistant, api_key)
-
-        elif 'open youtube' in order:
-            webbrowser.open_new_tab("https://www.youtube.com/watch?v=xlt4JpaPzko")
-            personal_assistant.respond("Youtube is opening")
 
         elif 'meal' in order:
             api_key = api_keys.get("Spoonacular").split("\n")[0]
@@ -87,10 +85,6 @@ if __name__ == '__main__':
                 answer = personal_assistant.talk()
                 if answer != "yes":
                     answer = False
-
-        elif 'detect' in order:
-            # Detect language with gui (TextField to copy the sentence to detect language
-            pass
 
         elif 'youtube' in order:
             ym.manage_youtube(personal_assistant)

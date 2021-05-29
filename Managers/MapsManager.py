@@ -1,4 +1,5 @@
 import webbrowser
+import os
 
 
 def manage_maps(assistant):
@@ -34,9 +35,7 @@ def manage_maps(assistant):
         assistant.respond("You didn't choose anything.")
         return
     webbrowser.open_new_tab(url)
-    wait = ""
-    while wait == "":
-        wait = assistant.talk()
+    close_browser(assistant)
 
 
 def url_encode(query):
@@ -45,3 +44,16 @@ def url_encode(query):
     query = query.replace(",", "%2C")
     query = query.lower()
     return query
+
+
+def close_browser(assistant):
+    answer = ""
+    while answer == "":
+        answer = assistant.talk()
+        if answer == "close":
+            try:
+                os.system('pkill Safari')
+            except Exception:
+                print(str(Exception))
+        else:
+            answer = ""

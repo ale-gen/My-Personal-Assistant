@@ -63,6 +63,7 @@ def choose_dish(api_key, assistant, data):
     choice = int(choice)
     delete_images(images, titles)
     print(data)
+    #recipe_view.close_window()
     id = data['results'][choice]['id']
     return fetch_recipes_json(api_key, False, None, id)
 
