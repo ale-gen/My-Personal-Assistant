@@ -1,205 +1,101 @@
-from tkinter import *
-import time
-import random
+"""import tkinter as tk
+from PIL import Image
 
-window_width = 700
-window_height = 400
-window = Tk()
+window = tk.Tk()
+window.geometry("200x300+1300+0")
 window.title("MPA")
-canvas = Canvas(window, width=window_width, height=window_height, bg="black")
-canvas.pack()
-single_sound_image = PhotoImage(file='sound.png').subsample(10, 10)
+window.configure(bg="white")
+file = 'speaker.gif'
 
-image_width = single_sound_image.width()
-image_height = single_sound_image.height()
-window_vertical_center = (window_height - image_height) / 2
-image_coordinates = []
-i = 0
-while i < window_width:
-    image = canvas.create_image(i, window_vertical_center, image=single_sound_image, anchor=NW)
-    image_coordinates.append(i)
-    i += image_width + 5
+info = Image.open(file)
+frames = info.n_frames
+sub_gif = [tk.PhotoImage(file=file, format=f'gif -index {i}').subsample(5, 5) for i in range(frames)]
+count = 0
+anim = None
 
-columns_number = len(image_coordinates)
+def animation(count):
+    #global anim
+    gif = sub_gif[count]
+    gif_label.configure(image=gif)
 
-image_column = random.randint(0, columns_number)
-images = []
+    count += 1
+    if count == frames:
+        count = 0
 
+    anim = window.after(100, lambda: animation(count))
 
-def draw_line_up(column, max_height):
-    j = window_vertical_center
-    j += 5
-    if 0 <= column < columns_number:
-        while j >= max_height:
-            image = canvas.create_image(image_coordinates[column], j - image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append((image, column))
-            window.update()
-            time.sleep(0.00001)
-            j -= 10
-            j += image_height
+def stop_animation():
+    #global anim
+    window.after_cancel(anim)
 
+gif_label = tk.Label(window, image="")
+gif_label.pack()
 
-def draw_line_down(column, min_height):
-    j = window_vertical_center
-    j += 5
-    if 0 <= column < columns_number:
-        while j <= min_height:
-            image = canvas.create_image(image_coordinates[column], j + image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append((image, column))
-            window.update()
-            time.sleep(0.00001)
-            j += 10
-            j -= image_height
+start = tk.Button(window, text='start', command=lambda: animation(count))
+start.pack()
+
+stop = tk.Button(window, text='stop', command=stop_animation)
+stop.pack()
 
 
-def remove_line(column):
-    print(images)
-    for photo in images:
-        print(photo)
-        if photo[1] == column:
-            canvas.delete(photo[1])
-            images.remove(photo)
+window.mainloop()"""
+
+import tkinter as tk
+import os
+from PIL import Image, ImageTk
+
+sub_gif = []
+count = 0
+anime = None
+images = ["recipes", "alarm", "forecast", "google", "maps", "time", "translator", "wikipedia", "youtube"]
 
 
-"""            
-for i in range(0, 15):
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column + i <= columns_number:
-        while j > (window_height / 3) + i * image_height:
-            image = canvas.create_image(image_coordinates[image_column + i], j - image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            j -= 10
-            j += image_height
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column - i <= columns_number:
-        while j > (window_height / 3) + i * image_height:
-            image = canvas.create_image(image_coordinates[image_column - i], j - image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            window.update()
-            time.sleep(0.001)
-            j -= 10
-            j += image_height
+def get_image_list():
+    global sub_gif
+    file = "../Main/speaker.gif"
+    info = Image.open(file)
+    frames = info.n_frames
+    sub_gif = [tk.PhotoImage(file=file, format=f'gif -index {i}').subsample(5, 5) for i in range(frames)]
 
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column + i <= columns_number:
-        while j < (2 * window_height / 3) - i * image_height:
-            image = canvas.create_image(image_coordinates[image_column + i], j + image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            j += 10
-            j -= image_height
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column - i <= columns_number:
-        while j < (2 * window_height / 3) - i * image_height:
-            image = canvas.create_image(image_coordinates[image_column - i], j + image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            window.update()
-            time.sleep(0.001)
-            j += 10
-            j -= image_height"""
-for i in range(0, 10):
-    omit = False
-    image_column = random.randint(0, columns_number)
-    if len(images) > 0:
-        for photo in images:
-            if abs(photo[1] - image_column) <= 5:
-                omit = True
-            else:
-                omit = False
-    if not omit:
-        for x in range(0, 10):
-            if 0 <= image_column + x <= columns_number:
-                draw_line_up(image_column + x, window_height / 3 + x * image_height)
-                draw_line_down(image_column + x, 2 * window_height / 3 - x * image_height)
-                if 0 <= image_column - x <= columns_number:
-                    remove_line(image_column - x)
-            if 0 <= image_column - x <= columns_number:
-                draw_line_up(image_column - x, window_height / 3 + x * image_height)
-                draw_line_down(image_column - x, 2 * window_height / 3 - x * image_height)
-                if 0 <= image_column + x <= columns_number:
-                    remove_line(image_column + x)
-window.mainloop()
 
-"""from tkinter import *
-import time
-import random
+def move_images(self):
 
-window_width = 700
-window_height = 400
-window = Tk()
-window.title("MPA")
-canvas = Canvas(window, width=window_width, height=window_height, bg="black")
-canvas.pack()
-single_sound_image = PhotoImage(file='sound.png').subsample(10, 10)
+    global count
+    global anime
+    global sub_gif
+    gif = sub_gif[count]
+    self.gif_label.configure(image=gif)
 
-image_width = single_sound_image.width()
-image_height = single_sound_image.height()
-window_vertical_center = (window_height - image_height) / 2
-image_coordinates = []
-i = 0
-while i < window_width:
-    image = canvas.create_image(i, window_vertical_center, image=single_sound_image, anchor=NW)
-    image_coordinates.append(i)
-    i += image_width + 5
+    count += 1
+    if count == len(sub_gif) - 1:
+        count = 0
 
-columns_number = len(image_coordinates)
+    anime = self.after(100, lambda: move_images(self))
 
-image_column = random.randint(0, columns_number)
-print(image_column)
-print(columns_number)
-images = []
 
-for i in range(0, 15):
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column + i <= columns_number:
-        while j > (window_height / 3) + i * image_height:
-            image = canvas.create_image(image_coordinates[image_column + i], j - image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            j -= 10
-            j += image_height
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column - i <= columns_number:
-        while j > (window_height / 3) + i * image_height:
-            image = canvas.create_image(image_coordinates[image_column - i], j - image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            window.update()
-            time.sleep(0.001)
-            j -= 10
-            j += image_height
+def stop_animation(self):
+    global anime
+    self.after_cancel(anime)
 
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column + i <= columns_number:
-        while j < (2 * window_height / 3) - i * image_height:
-            image = canvas.create_image(image_coordinates[image_column + i], j + image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            j += 10
-            j -= image_height
-    j = window_vertical_center
-    j += 5
-    if 0 <= image_column - i <= columns_number:
-        while j < (2 * window_height / 3) - i * image_height:
-            image = canvas.create_image(image_coordinates[image_column - i], j + image_height,
-                                        image=single_sound_image, anchor=NW)
-            images.append(image)
-            window.update()
-            time.sleep(0.001)
-            j += 10
-            j -= image_height
 
-window.mainloop()
-"""
+class SpeakerView(tk.Tk):
+
+    def __init__(self):
+
+        tk.Tk.__init__(self)
+        self.title("MPA")
+        self.geometry("200x200+1300+0")
+        self.configure(bg="white")
+        get_image_list()
+
+        self.gif_label = tk.Label(self)
+        self.gif_label.pack()
+        self.after(100, move_images(self))
+        move_images(self)
+        self.mainloop()
+
+    def stop(self):
+        stop_animation(self)
+
+    def move(self):
+        move_images(self)

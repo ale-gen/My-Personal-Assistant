@@ -11,6 +11,8 @@ import Managers.RecipeManager as rm
 import Managers.LanguageManager as lm
 import Managers.YoutubeManager as ym
 import Managers.MapsManager as mm
+from Views.SpeakerView import SpeakerView
+import threading
 
 
 if __name__ == '__main__':
@@ -24,6 +26,7 @@ if __name__ == '__main__':
         help = random.randint(0, len(help_commands)-1)
         personal_assistant.respond(help_commands[help])
         order = ""
+        speaker_view = SpeakerView()
         while order == "":
             order = personal_assistant.talk().lower()
 
@@ -91,3 +94,7 @@ if __name__ == '__main__':
 
         elif 'maps' in order:
             mm.manage_maps(personal_assistant)
+
+        else:
+            pass
+
