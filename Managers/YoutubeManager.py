@@ -210,6 +210,8 @@ def manage_youtube(assistant):
                     done = False
             options_during_watching(assistant, driver)
             assistant.respond("Do you want to search something else?")
-            answer = assistant.talk()
+            answer = ""
+            while answer == "":
+                answer = assistant.talk()
         driver.close()
 

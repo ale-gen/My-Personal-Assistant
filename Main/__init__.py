@@ -12,8 +12,6 @@ import Managers.LanguageManager as lm
 import Managers.YoutubeManager as ym
 import Managers.MapsManager as mm
 from Views.SpeakerView import SpeakerView
-import threading
-
 
 if __name__ == '__main__':
     personal_assistant = sp.Speech
