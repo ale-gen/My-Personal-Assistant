@@ -12,7 +12,6 @@ class Alarm:
         self.__time_to_wait = None
 
     def set_alarm(self):
-        file = "../Main/Phone_Ringing.mp3"
         self.__personal_assistant.respond("What hour this alarm is to be set?")
         alarm_hour = self.__personal_assistant.talk()
         if alarm_hour.isdigit() and 0 <= int(alarm_hour) < 24:
@@ -30,18 +29,15 @@ class Alarm:
             self.__personal_assistant.respond("Incorrect minutes, sorry")
             return
 
-        #while datetime.now().hour <= alarm_hour and datetime.now().minute < alarm_minutes:
-            #time.sleep(1)
-        # playsound(file, True)
-        t = threading.Thread(target=self.wait_to_alarm(file))
-        #time = self.count_time_to_wait_sec()
-        #print(time)
-        #t = threading.Timer(time, playsound(file, True))
-        t.start()
+        threading.Thread(target=self.wait_to_alarm).start()
+        return 2
 
-    def wait_to_alarm(self, file):
+    def wait_to_alarm(self):
+        file = "../Main/Phone_Ringing.mp3"
+        count = 0
         while datetime.now().hour <= self.__hours and datetime.now().minute < self.__minutes:
-            time.sleep(1)
+            #print("I am waiting")
+            count += 1
         playsound(file, True)
 
     def count_time_to_wait_sec(self):

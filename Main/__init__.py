@@ -12,8 +12,10 @@ import Managers.LanguageManager as lm
 import Managers.YoutubeManager as ym
 import Managers.MapsManager as mm
 from Views.SpeakerView import SpeakerView
+from Views.StartView import StartView
 
 if __name__ == '__main__':
+    StartView()
     personal_assistant = sp.Speech
     personal_assistant.respond("Hi, I am MPA.")
     help_commands = fileData.fetch_help_commands()
@@ -41,7 +43,7 @@ if __name__ == '__main__':
             url = "https://www.google.com.tr/search?q={}".format(order)
             personal_assistant.respond(f"I am searching {order}")
             webbrowser.open_new_tab(url)
-            mm.close_browser()
+            mm.close_browser(personal_assistant)
 
         elif 'in wikipedia' in order:
             order = order.replace("in wikipedia", "")
@@ -71,7 +73,9 @@ if __name__ == '__main__':
         elif 'meal' in order:
             api_key = api_keys.get("Spoonacular").split("\n")[0]
             personal_assistant.respond("Give me the meal or tell random if you would like to draw for you.")
-            answer = personal_assistant.talk()
+            answer = ""
+            while answer == "":
+                answer = personal_assistant.talk()
             if 'random' in answer:
                 rm.check_recipe(personal_assistant, api_key, True)
             else:
@@ -94,4 +98,12 @@ if __name__ == '__main__':
 
         elif 'you do' in order:
             speaker_view = SpeakerView(personal_assistant)
+
+        # Needed for presentation
+        elif 'break' in order:
+            answer = ""
+            while answer == "":
+                answer = personal_assistant.talk()
+                if answer != "resume":
+                    answer = ""
 
